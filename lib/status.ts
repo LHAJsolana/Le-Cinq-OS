@@ -1,0 +1,4 @@
+import type { OrderStatus, TableStatus } from "@prisma/client";
+export const statusLabels: Record<TableStatus | OrderStatus,string> = {FREE:"Libre",ORDERING:"En commande",DRAFT:"Brouillon",SENT:"Envoyée",ACCEPTED:"Acceptée",PREPARING:"En préparation",READY:"Prête",SERVED:"Servie",PAYMENT_REQUESTED:"Paiement demandé",PAID:"Payée",CANCELLED:"Annulée"};
+export const statusStyles: Record<string,string> = {FREE:"bg-emerald-100 text-emerald-800",ORDERING:"bg-amber-100 text-amber-800",DRAFT:"bg-amber-100 text-amber-800",SENT:"bg-orange-100 text-orange-800",ACCEPTED:"bg-orange-100 text-orange-800",PREPARING:"bg-red-100 text-red-800",READY:"bg-blue-100 text-blue-800",SERVED:"bg-violet-100 text-violet-800",PAYMENT_REQUESTED:"bg-yellow-100 text-yellow-900",PAID:"bg-stone-200 text-stone-700",CANCELLED:"bg-stone-200 text-stone-500"};
+export const money=(n:number)=>`${n.toFixed(0)} MAD`;

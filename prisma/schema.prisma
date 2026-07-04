@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  PREPARING
+  READY
+  SERVED
+  PAYMENT_REQUESTED
+  PAID
+  CANCELLED
+}
+
+enum TableStatus {
+  FREE
+  ORDERING
+  SENT
+  PREPARING
+  READY
+  SERVED
+  PAYMENT_REQUESTED
+  PAID
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  OTHER
+}
+
+model CafeTable {
+  id        Int         @id @default(autoincrement())
+  number    Int         @unique
+  name      String?
+  status    TableStatus @default(FREE)
+  isActive  Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  orders    Order[]
+}
+
+model MenuCategory {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  sortOrder Int        @default(0)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     MenuItem[]
+}
+
+model MenuItem {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  price       Int
+  categoryId  Int
+  isActive    Boolean      @default(true)
+  isAvailable Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  category    MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]
+}
+
+model Waiter {
+  id        Int      @id @default(autoincrement())
+  name      String
+  pin       String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Order {
+  id            Int            @id @default(autoincrement())
+  tableId       Int
+  waiterId      Int?
+  waiterName    String
+  status        OrderStatus    @default(DRAFT)
+  total         Int            @default(0)
+  paymentMethod PaymentMethod?
+  paidAt        DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  table         CafeTable      @relation(fields: [tableId], references: [id])
+  waiter        Waiter?        @relation(fields: [waiterId], references: [id])
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id           Int      @id @default(autoincrement())
+  orderId      Int
+  menuItemId   Int
+  nameSnapshot String
+  quantity     Int      @default(1)
+  unitPrice    Int
+  notes        String   @default("")
+  options      String   @default("[]")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem     MenuItem @relation(fields: [menuItemId], references: [id])
+}

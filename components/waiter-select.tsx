@@ -1,0 +1,2 @@
+"use client";import {useRouter,useSearchParams} from "next/navigation";
+export function WaiterSelect({waiters}:{waiters:{id:number,name:string}[]}){const router=useRouter(),params=useSearchParams();return <select aria-label="Serveur" value={params.get("waiter")||waiters[0]?.id} onChange={e=>router.push(`/service?waiter=${e.target.value}`)} className="h-11 rounded-xl border border-coffee/15 bg-white px-3 text-sm font-bold">{waiters.map(w=><option key={w.id} value={w.id}>{w.name}</option>)}</select>}
