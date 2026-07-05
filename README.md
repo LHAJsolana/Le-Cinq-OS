@@ -18,12 +18,13 @@ Ouvrir `http://localhost:3000`. Les données initiales comprennent 12 tables, le
 Copier `.env.example` vers `.env`. En local :
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/postgres"
 ```
 
 ## Déploiement Vercel
 
-SQLite convient au MVP local, mais son fichier n’est pas persistant sur Vercel. Pour la production, utiliser PostgreSQL (Neon, Supabase ou Vercel Postgres), remplacer le provider Prisma par `postgresql`, définir `DATABASE_URL` dans Vercel, puis exécuter `prisma migrate deploy` pendant le déploiement. Le projet se construit avec `npm run build`.
+L’application utilise PostgreSQL (Supabase recommandé). Définir `DATABASE_URL` et `DIRECT_URL` dans Vercel, puis exécuter `prisma migrate deploy` avant le déploiement. Le projet se construit avec `npm run build`.
 
 ## Parcours
 
